@@ -10,11 +10,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int _currentIndex = 0;
-  List<Widget> _pages = [
-    SearchPage(),
-    HomePage(),
-    PerfilPage()
-  ];
+  List<Widget> _pages = [HomePage(), SearchPage(), PerfilPage()];
   void onTappedBar(int i) {
     setState(() {
       _currentIndex = i;
@@ -36,8 +32,8 @@ class _BottomBarState extends State<BottomBar> {
         unselectedItemColor: Colors.black,
         currentIndex: _currentIndex,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil")
         ],
       ),

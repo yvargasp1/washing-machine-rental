@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 class CardContainer extends StatelessWidget {
   final Widget child;
-  
+
   const CardContainer({
     Key? key,
     required this.child,
@@ -23,14 +22,14 @@ class CardContainer extends StatelessWidget {
   }
 
   BoxDecoration _createCardShape() => BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(25),
-    boxShadow: [
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25),
+        /*   boxShadow: [
       BoxShadow(
-        color: Colors.black,
+        color: Colors.white,
         blurRadius: 15,
         offset: Offset(5, 5)
       )
-    ]
-  );
+    ] */
+      );
 }

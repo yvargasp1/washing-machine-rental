@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/pages/init_page.dart';
 import 'package:productos_app/src/pages/pages.dart';
@@ -14,22 +13,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: 'init_page',
       routes: {
-        'login': ( _ ) => LoginPage(),
-        'home':  ( _ ) => HomePage(),
-        'register':  ( _ ) => RegisterPage(),
-        'init_page':  ( _ ) => InitPage(),
+        'login': (_) => LoginPage(),
+        'home': (_) => HomePage(),
+        'register': (_) => RegisterPage(),
+        'init_page': (_) => InitPage(),
       },
       theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Colors.grey[300],
-        appBarTheme: AppBarTheme(
-          elevation: 0,
-          color: Colors.indigo,
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.indigo,
-          elevation: 0,
-        )
-      ),
+          scaffoldBackgroundColor: Colors.blue[200],
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            color: Colors.indigo,
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.indigo,
+            elevation: 0,
+          )),
     );
   }
 }

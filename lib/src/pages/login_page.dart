@@ -42,8 +42,11 @@ class LoginPage extends StatelessWidget {
               new RichText(
                 text: new TextSpan(children: [
                   new TextSpan(
-                    text: 'Crear nueva cuenta.',
-                    style: new TextStyle(color: Colors.blue,fontSize: 15),
+                    text: 'Crea una nueva cuenta.',
+                    style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.push(
