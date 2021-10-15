@@ -63,8 +63,14 @@ class HomePage extends StatelessWidget {
 
   AppBar buildAppBar(context) {
     return AppBar(
+      centerTitle: true,
+      title: Text(
+        'Modelos',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
+      ),
       backgroundColor: Colors.white,
-      leading: GestureDetector(
+      /* leading: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
@@ -72,7 +78,7 @@ class HomePage extends StatelessWidget {
           Icons.arrow_back,
           color: Colors.black,
         ),
-      ),
+      ), */
       /*   actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),

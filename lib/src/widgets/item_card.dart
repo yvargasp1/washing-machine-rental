@@ -33,6 +33,7 @@ class ItemCard extends StatelessWidget {
               child: Image(image: AssetImage(product!.image,))
               
               ),
+              
         )
             ,
              

@@ -26,7 +26,7 @@ class BodyDetailProduct extends StatelessWidget {
                   margin: EdgeInsets.only(top: size.height * 0.4),
                   padding: EdgeInsets.only(
                     top: size.height * 0.18,
-                    left: 12,
+                    left: 15,
                     right: 12,
                   ),
                   // height: 500,
@@ -43,8 +43,6 @@ class BodyDetailProduct extends StatelessWidget {
                         height: 30,
                       ),
                       CounterHours(),
-
-                      
                     ],
                   ),
                 ),
