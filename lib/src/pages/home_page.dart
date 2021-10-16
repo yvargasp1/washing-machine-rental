@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/products.dart';
 import 'package:productos_app/src/pages/details_product_page.dart';
+import 'package:productos_app/src/pages/edit_product_page.dart';
 import 'package:productos_app/src/pages/register_page.dart';
-import 'package:productos_app/src/pages/search_page.dart';
+import 'package:productos_app/src/pages/request_page.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
@@ -79,30 +80,22 @@ class HomePage extends StatelessWidget {
           color: Colors.black,
         ),
       ), */
-      /*   actions: <Widget>[
+      actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EditProductPage()));
+            },
             child: Icon(
-              Icons.search,
+              Icons.add,
               color: Colors.black,
               size: 26.0,
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: GestureDetector(
-            onTap: () {},
-            child: Icon(
-              Icons.history,
-              color: Colors.black,
-              size: 26.0,
-            ),
-          ),
-        )
-      ], */
+      ],
     );
   }
 }

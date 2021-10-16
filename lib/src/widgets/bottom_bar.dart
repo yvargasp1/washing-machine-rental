@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/pages/home_page.dart';
 import 'package:productos_app/src/pages/perfil_page.dart';
-import 'package:productos_app/src/pages/search_page.dart';
+import 'package:productos_app/src/pages/request_page.dart';
 
 class BottomBar extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int _currentIndex = 0;
-  List<Widget> _pages = [HomePage(), SearchPage(), PerfilPage()];
+  List<Widget> _pages = [HomePage(), RequestPage(), PerfilPage()];
   void onTappedBar(int i) {
     setState(() {
       _currentIndex = i;
@@ -33,7 +33,8 @@ class _BottomBarState extends State<BottomBar> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.note_alt), label: "Solicitudes"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil")
         ],
       ),

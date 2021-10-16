@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:productos_app/src/models/clients.dart';
 import 'package:productos_app/src/models/products.dart';
 import 'package:productos_app/src/models/requests.dart';
 import 'package:productos_app/src/pages/details_product_page.dart';
 import 'package:productos_app/src/pages/home_page.dart';
 import 'package:productos_app/src/pages/register_page.dart';
-import 'package:productos_app/src/pages/search_page.dart';
+import 'package:productos_app/src/pages/request_page.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 
-class SearchPage extends StatelessWidget {
+class RequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

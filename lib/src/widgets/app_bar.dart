@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:productos_app/src/pages/search_page.dart';
+import 'package:productos_app/src/pages/request_page.dart';
 class ButtonAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class ButtonAppBar extends StatelessWidget {
              Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SearchPage()));
+                                builder: (context) => RequestPage()));
           },
           child: Icon(
             Icons.arrow_back,

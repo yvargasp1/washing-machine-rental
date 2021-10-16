@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/clients.dart';
 import 'package:productos_app/src/models/products.dart';
-import 'package:productos_app/src/pages/details_product_page.dart';
-import 'package:productos_app/src/pages/register_page.dart';
-import 'package:productos_app/src/pages/request_page.dart';
-import 'package:productos_app/src/widgets/widgets.dart';
 
-class PerfilPage extends StatefulWidget {
+class EditProductPage extends StatefulWidget {
   @override
-  _PerfilPageState createState() => _PerfilPageState();
+  _EditProductPage createState() => _EditProductPage();
 }
 
-class _PerfilPageState extends State<PerfilPage> {
+class _EditProductPage extends State<EditProductPage> {
   bool isobscurepass = true;
   @override
   Widget build(BuildContext context) {
@@ -45,7 +41,7 @@ class _PerfilPageState extends State<PerfilPage> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(clients[0].image))),
+                              image: AssetImage(products[0].image))),
                     ),
                     Positioned(
                       bottom: 0,
@@ -78,7 +74,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     children: [
-                      buildTextField("Nombre", clients[0].name, false),
+                      buildTextField("Nombre", products[0].title, false),
                     ],
                   )),
               SizedBox(
@@ -93,7 +89,8 @@ class _PerfilPageState extends State<PerfilPage> {
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     children: [
-                      buildTextField("Telefono", clients[0].phone, false),
+                      buildTextField(
+                          "Descripcion", products[0].description, false),
                     ],
                   )),
               SizedBox(
@@ -108,7 +105,8 @@ class _PerfilPageState extends State<PerfilPage> {
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     children: [
-                      buildTextField("Dirección", clients[0].address, false),
+                      buildTextField(
+                          "Valor estimado / hora", products[0].price, false),
                     ],
                   )),
               SizedBox(
@@ -123,7 +121,8 @@ class _PerfilPageState extends State<PerfilPage> {
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     children: [
-                      buildTextField("Contraseña", clients[0].password, true),
+                      buildTextField(
+                          "Cantidad de prendas", products[0].size, true),
                     ],
                   )),
               SizedBox(
@@ -147,7 +146,9 @@ class _PerfilPageState extends State<PerfilPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    onPressed: () {}),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
               ),
             ],
           ),
@@ -160,39 +161,33 @@ class _PerfilPageState extends State<PerfilPage> {
     return AppBar(
       backgroundColor: Colors.white,
       centerTitle: true,
-      title: Text(
-        'Perfil',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
-      ),
       leading: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
+        child: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
       ),
-      /*   actions: <Widget>[
+      title: Text(
+        'Producto',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
+      ),
+
+      /* actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(
             onTap: () {},
             child: Icon(
-              Icons.search,
+              Icons.arrow_back,
               color: Colors.black,
               size: 26.0,
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: GestureDetector(
-            onTap: () {},
-            child: Icon(
-              Icons.history,
-              color: Colors.black,
-              size: 26.0,
-            ),
-          ),
-        )
       ], */
     );
   }
@@ -209,8 +204,8 @@ class _PerfilPageState extends State<PerfilPage> {
                 ? IconButton(
                     onPressed: () {},
                     icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
+                      Icons.article,
+                      color: Colors.blue,
                     ))
                 : IconButton(
                     onPressed: () {},

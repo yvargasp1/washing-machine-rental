@@ -15,13 +15,14 @@ class InitPage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  height: 150,
+                  height: 100,
                   child: Center(
                     child: Text(
                       'wmachine bog',
                       style: TextStyle(
                           fontSize: 40,
-                          color: Colors.black,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                           //decoration: TextDecoration.underline,
                           //decorationColor: Colors.green,
                           decorationStyle: TextDecorationStyle.wavy),
@@ -29,14 +30,14 @@ class InitPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 200,
+                  height: 300,
                 ),
                 MaterialButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     disabledColor: Colors.grey,
                     elevation: 0,
-                    color: Colors.black,
+                    color: Colors.blue[200],
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 90, vertical: 15),
@@ -67,7 +68,7 @@ class InitPage extends StatelessWidget {
                       child: Text(
                         'Registrarse',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.blue[200],
                             decorationStyle: TextDecorationStyle.wavy),
                       ),
                     ),

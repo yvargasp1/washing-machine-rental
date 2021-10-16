@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/pages/edit_product_page.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 
 class DetailsProduct extends StatelessWidget {
@@ -30,29 +31,21 @@ AppBar buildAppBar(context) {
         color: Colors.black,
       ),
     ),
-    /* actions: <Widget>[
+    actions: <Widget>[
       Padding(
         padding: EdgeInsets.only(right: 20.0),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => EditProductPage()));
+          },
           child: Icon(
-            Icons.search,
+            Icons.edit,
             color: Colors.black,
             size: 26.0,
           ),
         ),
       ),
-      Padding(
-        padding: EdgeInsets.only(right: 20.0),
-        child: GestureDetector(
-          onTap: () {},
-          child: Icon(
-            Icons.history,
-            color: Colors.black,
-            size: 26.0,
-          ),
-        ),
-      )
-    ], */
+    ],
   );
 }

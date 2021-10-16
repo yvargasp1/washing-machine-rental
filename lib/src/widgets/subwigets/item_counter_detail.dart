@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:productos_app/src/pages/search_page.dart';
+import 'package:productos_app/src/pages/request_page.dart';
 
 class CounterHours extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _CounterHoursState extends State<CounterHours> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SearchPage()));
+                context, MaterialPageRoute(builder: (context) => RequestPage()));
           }),
     ]);
   }
