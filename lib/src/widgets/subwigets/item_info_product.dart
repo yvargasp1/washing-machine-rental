@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/models/products2.dart';
 
 class InfoProduct extends StatelessWidget {
   const InfoProduct({
@@ -7,7 +8,7 @@ class InfoProduct extends StatelessWidget {
     required this.product,
   }) : super(key: key);
 
-  final Product? product;
+  final Product2? product;
 
   @override
   Widget build(BuildContext context) {

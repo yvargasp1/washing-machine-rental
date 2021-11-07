@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/pages/details_product_page.dart';
 import 'package:productos_app/src/pages/edit_product_page.dart';
+import 'package:productos_app/src/pages/loading_page.dart';
 import 'package:productos_app/src/pages/register_page.dart';
 import 'package:productos_app/src/pages/request_page.dart';
+import 'package:productos_app/src/services/services.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final productService = Provider.of<ProductService>(context);
+    if (productService.isLoading) return LoadingPage();
 
     return Stack(
       children: [
@@ -40,16 +44,16 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 5.0, vertical: 5.0),
                   child: GridView.builder(
-                    itemCount: products.length,
+                    itemCount: productService.products.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1, childAspectRatio: 0.8),
+                        crossAxisCount: 1, childAspectRatio: 0.79),
                     itemBuilder: (context, index) => ItemCard(
-                      product: products[index],
+                      product: productService.products[index],
                       press: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => DetailsProduct(
-                                    product: products[index],
+                                    product: productService.products[index],
                                   ))),
                     ),
                   ),

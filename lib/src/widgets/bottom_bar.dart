@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/pages/home_page.dart';
 import 'package:productos_app/src/pages/perfil_page.dart';
 import 'package:productos_app/src/pages/request_page.dart';
@@ -9,6 +10,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  late final Product2 product2;
   int _currentIndex = 0;
   List<Widget> _pages = [HomePage(), RequestPage(), PerfilPage()];
   void onTappedBar(int i) {

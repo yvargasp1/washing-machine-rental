@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/widgets/subwigets/Item_detail.dart';
 import 'package:productos_app/src/widgets/subwigets/item_counter_detail.dart';
 import 'package:productos_app/src/widgets/subwigets/item_info_product.dart';
 
 class BodyDetailProduct extends StatelessWidget {
-  final Product? product;
+  final Product2? product;
 
   const BodyDetailProduct({Key? key, this.product}) : super(key: key);
 

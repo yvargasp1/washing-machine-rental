@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/clients.dart';
 import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/models/products2.dart';
+import 'package:productos_app/src/services/services.dart';
+import 'package:provider/provider.dart';
 
 class EditProductPage extends StatefulWidget {
+  final Product2? product;
+  EditProductPage({Key? key, this.product}) : super(key: key);
   @override
   _EditProductPage createState() => _EditProductPage();
 }
@@ -12,6 +17,8 @@ class _EditProductPage extends State<EditProductPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // ignore: unnecessary_statements
+    widget.product;
 
     return Stack(
       children: [
@@ -31,17 +38,20 @@ class _EditProductPage extends State<EditProductPage> {
                       width: 130,
                       height: 130,
                       decoration: BoxDecoration(
-                          border: Border.all(width: 4, color: Colors.white),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(.1))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(products[0].image))),
+                        border: Border.all(width: 4, color: Colors.white),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(.1))
+                        ],
+                        shape: BoxShape.rectangle,
+                      ),
+                      child: FadeInImage(
+                        placeholder: AssetImage('assets/jar-loading.gif'),
+                        image: NetworkImage(widget.product!.image),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -51,7 +61,7 @@ class _EditProductPage extends State<EditProductPage> {
                         width: 40,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(width: 4, color: Colors.white),
+                            border: Border.all(width: 0, color: Colors.white),
                             color: Colors.blue),
                         child: Icon(
                           Icons.edit,
@@ -74,7 +84,7 @@ class _EditProductPage extends State<EditProductPage> {
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     children: [
-                      buildTextField("Nombre", products[0].title, false),
+                      buildTextField("Nombre", widget.product!.title, false),
                     ],
                   )),
               SizedBox(
@@ -90,7 +100,23 @@ class _EditProductPage extends State<EditProductPage> {
                   child: Column(
                     children: [
                       buildTextField(
-                          "Descripcion", products[0].description, false),
+                          "Descripcion", widget.product!.description, false),
+                    ],
+                  )),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  height: 80,
+                  margin: const EdgeInsets.all(15.0),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Column(
+                    children: [
+                      buildTextField("Valor estimado / hora",
+                          widget.product!.price, false),
                     ],
                   )),
               SizedBox(
@@ -106,23 +132,7 @@ class _EditProductPage extends State<EditProductPage> {
                   child: Column(
                     children: [
                       buildTextField(
-                          "Valor estimado / hora", products[0].price, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField(
-                          "Cantidad de prendas", products[0].size, true),
+                          "Cantidad de prendas", widget.product!.size, true),
                     ],
                   )),
               SizedBox(
