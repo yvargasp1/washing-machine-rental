@@ -1,239 +1,167 @@
 import 'package:flutter/material.dart';
-import 'package:productos_app/src/models/clients.dart';
-import 'package:productos_app/src/models/products.dart';
 import 'package:productos_app/src/models/products2.dart';
-import 'package:productos_app/src/services/services.dart';
+import 'package:productos_app/src/pages/login_page.dart';
+import 'package:productos_app/src/providers/providers.dart';
+import 'package:productos_app/src/ui/Input_decorations.dart';
+import 'package:productos_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class EditProductPage extends StatefulWidget {
+class EditProductPage extends StatelessWidget {
   final Product2? product;
   EditProductPage({Key? key, this.product}) : super(key: key);
   @override
-  _EditProductPage createState() => _EditProductPage();
-}
-
-class _EditProductPage extends State<EditProductPage> {
-  bool isobscurepass = true;
-  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    // ignore: unnecessary_statements
-    widget.product;
-
-    return Stack(
-      children: [
-        Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.blue[200],
-          appBar: buildAppBar(context),
-          body: ListView(
+    return Scaffold(
+      body: AuthBackground(
+        child: SingleChildScrollView(
+          child: Column(
             children: [
               SizedBox(
-                height: 20,
+                height: 100,
               ),
-              Center(
-                child: Stack(
+              CardContainer(
+                child: Column(
                   children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(.1))
-                        ],
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: FadeInImage(
-                        placeholder: AssetImage('assets/jar-loading.gif'),
-                        image: NetworkImage(widget.product!.image),
-                        fit: BoxFit.cover,
-                      ),
+                    SizedBox(
+                      height: 30,
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 0, color: Colors.white),
-                            color: Colors.blue),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
+                    Text(
+                      'Editar producto',
+                      style: Theme.of(context).textTheme.headline5,
                     ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ChangeNotifierProvider(
+                        create: (_) => ProductFormProvider(product),
+                        child: _EditarProductoForm()),
                   ],
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 50,
               ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Nombre", widget.product!.title, false),
-                    ],
-                  )),
+              /*  Text(
+                'Crear una nueva cuenta',
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              ), */
               SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField(
-                          "Descripcion", widget.product!.description, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Valor estimado / hora",
-                          widget.product!.price, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField(
-                          "Cantidad de prendas", widget.product!.size, true),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 80,
-                margin: const EdgeInsets.all(15.0),
-                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    disabledColor: Colors.grey,
-                    elevation: 0,
-                    color: Colors.green,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      child: Text(
-                        "Actualizar",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
+                height: 50,
               ),
             ],
           ),
-        )
-      ],
-    );
-  }
-
-  AppBar buildAppBar(context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
         ),
       ),
-      title: Text(
-        'Producto',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
-      ),
-
-      /* actions: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: GestureDetector(
-            onTap: () {},
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-              size: 26.0,
-            ),
-          ),
-        ),
-      ], */
     );
   }
+}
 
-  Widget buildTextField(String labeltext, String placeholder, bool ispass) {
-    FocusNode fnode = new FocusNode();
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: TextField(
-        focusNode: fnode,
-        obscureText: ispass ? isobscurepass : false,
-        decoration: InputDecoration(
-            suffixIcon: ispass
-                ? IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.article,
-                      color: Colors.blue,
-                    ))
-                : IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.article,
-                      color: Colors.blue,
-                    )),
-            contentPadding: EdgeInsets.only(bottom: 5),
-            labelText: labeltext,
-            labelStyle:
-                TextStyle(color: fnode.hasFocus ? Colors.white : Colors.blue),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black)),
-      ),
+class _EditarProductoForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final productForm = Provider.of<ProductFormProvider>(context);
+    final product = productForm.product2;
+    return Container(
+      child: Form(
+          key: productForm.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            children: [
+              FadeInImage(
+                placeholder: AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(product!.image),
+                fit: BoxFit.cover,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                  autocorrect: false,
+                  initialValue: product.title,
+                  decoration: InputDecorations.authInputDecoration(
+                      labelText: 'Nombre',
+                      prefix: Icons.person_off,
+                      hintText: 'Nombre del producto'),
+                  onChanged: (value) => product.title = value,
+                  validator: (value) {
+                    if (value != null && value.length >= 5) return null;
+                    return 'El Nombre debe tener minimo 5 caracteres';
+                  }),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                  autocorrect: false,
+                  initialValue: product.description,
+                  decoration: InputDecorations.authInputDecoration(
+                      labelText: 'Descripcion',
+                      prefix: Icons.person_off,
+                      hintText: 'Descripcion del producto'),
+                  onChanged: (value) => product.description = value,
+                  validator: (value) {
+                    if (value != null && value.length >= 5) return null;
+                    return 'La Descripcion debe tener minimo 5 caracteres';
+                  }),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                  autocorrect: false,
+                  initialValue: '${product.price}',
+                  decoration: InputDecorations.authInputDecoration(
+                      labelText: 'Precio',
+                      prefix: Icons.person_off,
+                      hintText: 'Descripcion del Precio'),
+                  onChanged: (value) => product.price = value,
+                  validator: (value) {
+                    if (value != null && value.length >= 3) return null;
+                    return 'El Precio debe tener minimo 3 caracteres';
+                  }),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                  autocorrect: false,
+                  initialValue: product.size,
+                  decoration: InputDecorations.authInputDecoration(
+                      labelText: 'Capacidad',
+                      prefix: Icons.person_off,
+                      hintText: 'Capacidad'),
+                  onChanged: (value) => product.size = value,
+                  validator: (value) {
+                    if (value != null && value.length >= 2) return null;
+                    return 'La Capacidad debe tener minimo 2 caracteres';
+                  }),
+              SizedBox(
+                height: 30,
+              ),
+              SwitchListTile.adaptive(
+                value: product.available,
+                title: Text('Disponible'),
+                activeColor: Colors.indigo,
+                onChanged: productForm.updateAvailability,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  disabledColor: Colors.grey,
+                  elevation: 0,
+                  color: Colors.black,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    child: Text(
+                      'Actualizar',
+                      style: TextStyle(
+                          color: Colors.white,
+                          decorationStyle: TextDecorationStyle.wavy),
+                    ),
+                  ),
+                  onPressed: () {}),
+            ],
+          )),
     );
   }
 }

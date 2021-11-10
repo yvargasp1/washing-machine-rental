@@ -5,11 +5,11 @@ class LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Products App'),
+        title: Text('wmachine bog'),
       ),
       body: Center(
         child: CircularProgressIndicator(
-          color: Colors.indigo,
+          color: Colors.blue[200],
         ),
       ),
     );

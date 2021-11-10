@@ -62,7 +62,7 @@ class _RegisterForm extends StatelessWidget {
           key: registerForm.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
-            children: [
+            children: [ 
               TextFormField(
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
