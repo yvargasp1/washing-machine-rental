@@ -28,11 +28,16 @@ class ItemCard extends StatelessWidget {
               width: 300,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(16)),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/jar-loading.gif'),
-                image: NetworkImage(product.image),
-                fit: BoxFit.cover,
-              )),
+              child: product.image == null
+                  ? Image(
+                      image: AssetImage('assets/no-image.png'),
+                      fit: BoxFit.cover,
+                    )
+                  : FadeInImage(
+                      placeholder: AssetImage('assets/jar-loading.gif'),
+                      image: NetworkImage(product.image!),
+                      fit: BoxFit.cover,
+                    )),
         ),
       ]),
     );

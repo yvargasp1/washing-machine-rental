@@ -4,7 +4,7 @@ import 'package:productos_app/src/models/products2.dart';
 class ProductFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  Product2? product2;
+  Product2 product2;
 
   ProductFormProvider(this.product2);
   bool isValidForm() {
@@ -12,7 +12,7 @@ class ProductFormProvider extends ChangeNotifier {
   }
 
   updateAvailability(bool value) {
-    this.product2!.available = true;
+    this.product2.available = true;
     notifyListeners();
   }
 }

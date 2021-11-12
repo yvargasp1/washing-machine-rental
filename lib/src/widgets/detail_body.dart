@@ -43,7 +43,7 @@ class BodyDetailProduct extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      CounterHours(),
+                      CounterHours(product:product),
                     ],
                   ),
                 ),

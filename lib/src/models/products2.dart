@@ -5,7 +5,7 @@ class Product2 {
     required this.available,
     required this.description,
     this.id,
-    required this.image,
+    this.image,
     required this.price,
     required this.size,
     required this.title,
@@ -14,7 +14,7 @@ class Product2 {
   bool available;
   String description;
   String? id;
-  String image;
+  String? image;
   String price;
   String size;
   String title;
@@ -26,8 +26,7 @@ class Product2 {
   factory Product2.fromMap(Map<String, dynamic> json) => Product2(
         available: json["available"],
         description: json["description"],
-        id: json["id"],
-        image: json["image"],
+        image: json["image"] == null ? null : json["image"],
         price: json["price"],
         size: json["size"],
         title: json["title"],
@@ -36,14 +35,14 @@ class Product2 {
   Map<String, dynamic> toMap() => {
         "available": available,
         "description": description,
-        "id": id,
-        "image": image,
+        "image": image == null ? null : image,
         "price": price,
         "size": size,
         "title": title,
       };
 
   Product2 copy() => Product2(
+      id: this.id,
       available: this.available,
       description: this.description,
       image: this.image,

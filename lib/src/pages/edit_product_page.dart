@@ -2,16 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/pages/login_page.dart';
 import 'package:productos_app/src/providers/providers.dart';
+import 'package:productos_app/src/services/product_service.dart';
 import 'package:productos_app/src/ui/Input_decorations.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class EditProductPage extends StatelessWidget {
   final Product2? product;
+
   EditProductPage({Key? key, this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final productService = Provider.of<ProductService>(context);
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: AuthBackground(
         child: SingleChildScrollView(
           child: Column(
@@ -33,8 +49,9 @@ class EditProductPage extends StatelessWidget {
                       height: 30,
                     ),
                     ChangeNotifierProvider(
-                        create: (_) => ProductFormProvider(product),
-                        child: _EditarProductoForm()),
+                        create: (_) => ProductFormProvider(product!),
+                        child: _EditarProductoForm(
+                            productService: productService)),
                   ],
                 ),
               ),
@@ -57,8 +74,14 @@ class EditProductPage extends StatelessWidget {
 }
 
 class _EditarProductoForm extends StatelessWidget {
+  const _EditarProductoForm({
+    Key? key,
+    required this.productService,
+  }) : super(key: key);
+  final ProductService productService;
   @override
   Widget build(BuildContext context) {
+    final productService = Provider.of<ProductService>(context);
     final productForm = Provider.of<ProductFormProvider>(context);
     final product = productForm.product2;
     return Container(
@@ -67,11 +90,16 @@ class _EditarProductoForm extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
-              FadeInImage(
-                placeholder: AssetImage('assets/jar-loading.gif'),
-                image: NetworkImage(product!.image),
-                fit: BoxFit.cover,
-              ),
+              product.image == null
+                  ? Image(
+                      image: AssetImage('assets/no-image.png'),
+                      fit: BoxFit.cover,
+                    )
+                  : FadeInImage(
+                      placeholder: AssetImage('assets/jar-loading.gif'),
+                      image: NetworkImage(product.image!),
+                      fit: BoxFit.cover,
+                    ),
               SizedBox(
                 height: 30,
               ),
@@ -159,7 +187,11 @@ class _EditarProductoForm extends StatelessWidget {
                           decorationStyle: TextDecorationStyle.wavy),
                     ),
                   ),
-                  onPressed: () {}),
+                  onPressed: () async {
+                    if (!productForm.isValidForm()) return;
+                    await productService
+                        .saveOrCreateProduct(productForm.product2);
+                  }),
             ],
           )),
     );

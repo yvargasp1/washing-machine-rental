@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/pages/request_page.dart';
+import 'package:productos_app/src/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 class CounterHours extends StatefulWidget {
+  const CounterHours({Key? key, this.product}) : super(key: key);
+
   @override
   _CounterHoursState createState() => _CounterHoursState();
+
+  final Product2? product;
 }
 
 class _CounterHoursState extends State<CounterHours> {
   int numofitems = 1;
+  bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
@@ -51,10 +60,27 @@ class _CounterHoursState extends State<CounterHours> {
             ),
           ),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => RequestPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => RequestPage()));
           }),
+      Expanded(
+        child: SwitchListTile.adaptive(
+            value: widget.product!.available,
+            title: Text(''),
+            activeColor: Colors.indigo,
+            onChanged: (bool value) {
+              setState(() {
+                _onSwitchChanged(value);
+              });
+            }),
+      ),
     ]);
+  }
+
+  void _onSwitchChanged(bool value) {
+    setState(() {
+      isSwitched = value;
+    });
   }
 
   SizedBox buildOutlinedButton(

@@ -41,11 +41,16 @@ class ItemTitleImage extends StatelessWidget {
                 ]),
               ),
               Expanded(
-                child: FadeInImage(
-                  placeholder: AssetImage('assets/jar-loading.gif'),
-                  image: NetworkImage(product!.image),
-                  fit: BoxFit.cover,
-                ),
+                child: product!.image == null
+                    ? Image(
+                        image: AssetImage('assets/no-image.png'),
+                        fit: BoxFit.cover,
+                      )
+                    : FadeInImage(
+                        placeholder: AssetImage('assets/jar-loading.gif'),
+                        image: NetworkImage(product!.image!),
+                        fit: BoxFit.cover,
+                      ),
               )
             ],
           )

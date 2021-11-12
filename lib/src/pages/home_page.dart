@@ -67,6 +67,7 @@ class HomePage extends StatelessWidget {
   }
 
   AppBar buildAppBar(context) {
+    final productService = Provider.of<ProductService>(context);
     return AppBar(
       centerTitle: true,
       title: Text(
@@ -89,8 +90,17 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditProductPage()));
+              productService.productSelected = new Product2(
+                  available: false,
+                  description: '',
+                  price: '',
+                  size: '',
+                  title: '');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditProductPage(
+                          product: productService.productSelected)));
             },
             child: Icon(
               Icons.add,
