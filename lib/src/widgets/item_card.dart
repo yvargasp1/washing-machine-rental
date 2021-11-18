@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/products.dart';
 import 'package:productos_app/src/models/products2.dart';
@@ -23,23 +25,31 @@ class ItemCard extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Container(
-              height: 180,
-              width: 300,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(16)),
-              child: product.image == null
-                  ? Image(
-                      image: AssetImage('assets/no-image.png'),
-                      fit: BoxFit.cover,
-                    )
-                  : FadeInImage(
-                      placeholder: AssetImage('assets/jar-loading.gif'),
-                      image: NetworkImage(product.image!),
-                      fit: BoxFit.cover,
-                    )),
-        ),
+            child: Container(
+          height: 180,
+          width: 300,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(16)),
+          child: getImage(product.image),
+        )),
       ]),
+    );
+  }
+
+  Widget getImage(String? image) {
+    if (image == null) {
+      return Image(image: AssetImage('assets/no-image.png'), fit: BoxFit.cover);
+    }
+    if (image.startsWith('http')) {
+      return FadeInImage(
+          placeholder: AssetImage('assets/jar-loading.gif'),
+          image: NetworkImage(image),
+          fit: BoxFit.cover);
+    }
+
+    return Image.file(
+      File(image),
+      fit: BoxFit.cover,
     );
   }
 }

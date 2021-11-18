@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/products.dart';
 import 'package:productos_app/src/models/products2.dart';
@@ -41,21 +43,29 @@ class ItemTitleImage extends StatelessWidget {
                 ]),
               ),
               Expanded(
-                child: product!.image == null
-                    ? Image(
-                        image: AssetImage('assets/no-image.png'),
-                        fit: BoxFit.cover,
-                      )
-                    : FadeInImage(
-                        placeholder: AssetImage('assets/jar-loading.gif'),
-                        image: NetworkImage(product!.image!),
-                        fit: BoxFit.cover,
-                      ),
+                child: getImage(product!.image),
               )
             ],
           )
         ],
       ),
+    );
+  }
+
+  Widget getImage(String? image) {
+    if (image == null) {
+      return Image(image: AssetImage('assets/no-image.png'), fit: BoxFit.cover);
+    }
+    if (image.startsWith('http')) {
+      return FadeInImage(
+          placeholder: AssetImage('assets/jar-loading.gif'),
+          image: NetworkImage(image),
+          fit: BoxFit.cover);
+    }
+
+    return Image.file(
+      File(image),
+      fit: BoxFit.cover,
     );
   }
 }

@@ -122,16 +122,30 @@ class _LoginForm extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
-                      'Ingresar',
+                      loginForm.isLoading ? 'Espere' : 'Ingresar',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  onPressed: () {
-                    if (loginForm.isValidForm()) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => BottomBar()));
-                    }
-                  }),
+                  onPressed: loginForm.isLoading
+                      ? null
+                      : () async {
+                          FocusScope.of(context).unfocus();
+                          if (!loginForm.isValidForm()) return;
+                          loginForm.isLoading = true;
+                          await Future.delayed(Duration(seconds: 2));
+                          loginForm.isLoading = false;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BottomBar()));
+
+                          /* {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BottomBar()));
+                          } */
+                        }),
             ],
           )),
     );

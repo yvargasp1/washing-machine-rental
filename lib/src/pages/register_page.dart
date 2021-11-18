@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/pages/login_page.dart';
 import 'package:productos_app/src/providers/providers.dart';
+import 'package:productos_app/src/services/services.dart';
 import 'package:productos_app/src/ui/Input_decorations.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -36,9 +38,27 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 20,
               ),
-             /*  Text(
+              new RichText(
+                text: new TextSpan(children: [
+                  new TextSpan(
+                    text: 'Ya tiene cuenta?.',
+                    style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                    recognizer: new TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
+                  ),
+                ]),
+              ),
+              /*  Text(
                 'Crear una nueva cuenta',
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
               ), */
@@ -57,12 +77,13 @@ class _RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerForm = Provider.of<RegisterFormProvider>(context);
+    final authService = Provider.of<AuthService>(context);
     return Container(
       child: Form(
           key: registerForm.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
-            children: [ 
+            children: [
               TextFormField(
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
@@ -92,14 +113,13 @@ class _RegisterForm extends StatelessWidget {
                       hintText: ''),
                   onChanged: (value) => registerForm.password = value,
                   validator: (value) {
-                    if (value != null && value.length >= 8) return null;
-                    return 'La contraseña debe tener minimo 8 caracteres';
+                    if (value != null && value.length >= 6) return null;
+                    return 'La contraseña debe tener minimo 6 caracteres';
                   }),
               SizedBox(
                 height: 30,
               ),
-
-              TextFormField(
+              /* TextFormField(
                   autocorrect: false,
                   decoration: InputDecorations.authInputDecoration(
                       labelText: 'Telefono',
@@ -113,7 +133,7 @@ class _RegisterForm extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-                TextFormField(
+              TextFormField(
                   autocorrect: false,
                   decoration: InputDecorations.authInputDecoration(
                       labelText: 'Dirección',
@@ -123,7 +143,7 @@ class _RegisterForm extends StatelessWidget {
                   validator: (value) {
                     if (value != null && value.length >= 7) return null;
                     return 'La dirección debe tener minimo 7 caracteres';
-                  }),
+                  }), */
               SizedBox(
                 height: 30,
               ),
@@ -135,21 +155,38 @@ class _RegisterForm extends StatelessWidget {
                   color: Colors.black,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                   child: Text(
+                    child: Text(
                       'Registrarse',
-                      style: TextStyle(color: Colors.white,
-                       decorationStyle: TextDecorationStyle.wavy
-                      ),
+                      style: TextStyle(
+                          color: Colors.white,
+                          decorationStyle: TextDecorationStyle.wavy),
                     ),
                   ),
-                  onPressed: () {
-                    if (registerForm.isValidForm()){
-                      
-                        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                    }
-
-                  }),
+                  onPressed: registerForm.isLoading
+                      ? null
+                      : () async {
+                          FocusScope.of(context).unfocus();
+                          if (!registerForm.isValidForm()) return;
+                          registerForm.isLoading = true;
+                          final String? errorMessage =
+                              await authService.createUsuario(
+                                  registerForm.email, registerForm.password);
+                          if (errorMessage == null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BottomBar()));
+                          } else {
+                            print(errorMessage);
+                            registerForm.isLoading = false;
+                          }
+                          /*  {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          } */
+                        }),
             ],
           )),
     );

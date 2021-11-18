@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:productos_app/src/models/products2.dart';
 import 'package:productos_app/src/pages/login_page.dart';
 import 'package:productos_app/src/providers/providers.dart';
@@ -90,18 +93,38 @@ class _EditarProductoForm extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
-              product.image == null
-                  ? Image(
-                      image: AssetImage('assets/no-image.png'),
-                      fit: BoxFit.cover,
-                    )
-                  : FadeInImage(
-                      placeholder: AssetImage('assets/jar-loading.gif'),
-                      image: NetworkImage(product.image!),
-                      fit: BoxFit.cover,
+              Stack(
+                children: [
+                  getImage(product.image),
+                  Positioned(
+                    top: 20,
+                    right: 10,
+                    child: IconButton(
+                      onPressed: () async {
+                        final picker = new ImagePicker();
+                        final pickedFile = await picker.pickImage(
+                          //source: ImageSource.gallery,
+                          source: ImageSource.camera,
+                          imageQuality: 100,
+                        );
+                        if (pickedFile == null) {
+                          print('No se captura imagen');
+                          return;
+                        }
+                        productService
+                            .updateSelectedProductImage(pickedFile.path);
+                      },
+                      icon: Icon(
+                        Icons.camera_alt_outlined,
+                        size: 40,
+                        color: Colors.blue[200],
+                      ),
                     ),
-              SizedBox(
-                height: 30,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
               ),
               TextFormField(
                   autocorrect: false,
@@ -172,28 +195,41 @@ class _EditarProductoForm extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  disabledColor: Colors.grey,
-                  elevation: 0,
-                  color: Colors.black,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                    child: Text(
-                      'Actualizar',
-                      style: TextStyle(
-                          color: Colors.white,
-                          decorationStyle: TextDecorationStyle.wavy),
-                    ),
-                  ),
-                  onPressed: () async {
-                    if (!productForm.isValidForm()) return;
-                    await productService
-                        .saveOrCreateProduct(productForm.product2);
-                  }),
+              FloatingActionButton(
+                child: productService.isSaving
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Icon(Icons.save_outlined),
+                onPressed: productService.isSaving
+                    ? null
+                    : () async {
+                        if (!productForm.isValidForm()) return;
+                        final String? imageUrl =
+                            await productService.upladImage();
+                        if (imageUrl != null)
+                          productForm.product2.image = imageUrl;
+                        await productService
+                            .saveOrCreateProduct(productForm.product2);
+                      },
+              ),
             ],
           )),
+    );
+  }
+
+  Widget getImage(String? image) {
+    if (image == null) {
+      return Image(image: AssetImage('assets/no-image.png'), fit: BoxFit.cover);
+    }
+    if (image.startsWith('http')) {
+      return FadeInImage(
+          placeholder: AssetImage('assets/jar-loading.gif'),
+          image: NetworkImage(image),
+          fit: BoxFit.cover);
+    }
+
+    return Image.file(
+      File(image),
+      fit: BoxFit.cover,
     );
   }
 }

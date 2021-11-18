@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 
@@ -12,7 +13,7 @@ class ProductService extends ChangeNotifier {
   late Product2 productSelected;
   bool isLoading = true;
   bool isSaving = false;
-
+  File? newPictureFile;
   ProductService() {
     this.loadProducts();
   }
@@ -67,4 +68,35 @@ class ProductService extends ChangeNotifier {
     this.products.add(product);
     return product.id!;
   }
+  void updateSelectedProductImage(String path) {
+      this.productSelected.image = path;
+      this.newPictureFile = File.fromUri(Uri(path: path));
+      notifyListeners();
+    }
+
+Future<String?> upladImage() async {
+    if (newPictureFile == null) return null;
+
+    this.isSaving = true;
+    notifyListeners();
+    final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/yvargasp1/image/upload?upload_preset=c0bbzuw5');
+    final imageUpload = http.MultipartRequest('POST', url);
+    final file =
+        await http.MultipartFile.fromPath('file', newPictureFile!.path);
+    imageUpload.files.add(file);
+    final streamResponse = await imageUpload.send();
+    final resp = await http.Response.fromStream(streamResponse);
+    if (resp.statusCode != 200 && resp.statusCode != 201) {
+      print('error');
+      print(resp.body);
+      return null;
+    }
+
+    print(resp.body);
+    this.newPictureFile = null;
+    final decodeData = json.decode(resp.body);
+    return decodeData['secure_url'];
+  }
+
 }
