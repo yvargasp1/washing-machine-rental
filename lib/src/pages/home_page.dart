@@ -68,6 +68,8 @@ class HomePage extends StatelessWidget {
 
   AppBar buildAppBar(context) {
     final productService = Provider.of<ProductService>(context);
+    final authservice = Provider.of<AuthService>(context, listen: false);
+
     return AppBar(
       centerTitle: true,
       title: Text(
@@ -76,15 +78,16 @@ class HomePage extends StatelessWidget {
         style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.white,
-      /* leading: GestureDetector(
+      leading: GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          authservice.logOut();
+          Navigator.pushReplacementNamed(context, 'login');
         },
         child: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
+          Icons.login_outlined,
+          color: Colors.red[300],
         ),
-      ), */
+      ),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),

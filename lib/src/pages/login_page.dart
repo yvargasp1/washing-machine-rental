@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/pages/register_page.dart';
 import 'package:productos_app/src/providers/providers.dart';
+import 'package:productos_app/src/services/services.dart';
 import 'package:productos_app/src/ui/Input_decorations.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,7 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
+    final authService = Provider.of<AuthService>(context);
     return Container(
       child: Form(
           key: loginForm.formKey,
@@ -107,8 +109,8 @@ class _LoginForm extends StatelessWidget {
                       hintText: ''),
                   onChanged: (value) => loginForm.password = value,
                   validator: (value) {
-                    if (value != null && value.length >= 8) return null;
-                    return 'La contraseña debe tener minimo 8 caracteres';
+                    if (value != null && value.length >= 6) return null;
+                    return 'La contraseña debe tener minimo 6 caracteres';
                   }),
               SizedBox(
                 height: 30,
@@ -132,12 +134,17 @@ class _LoginForm extends StatelessWidget {
                           FocusScope.of(context).unfocus();
                           if (!loginForm.isValidForm()) return;
                           loginForm.isLoading = true;
-                          await Future.delayed(Duration(seconds: 2));
-                          loginForm.isLoading = false;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BottomBar()));
+                          final String? errorMessage = await authService.login(
+                              loginForm.email, loginForm.password);
+                          if (errorMessage == null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BottomBar()));
+                          } else {
+                            print(errorMessage);
+                            loginForm.isLoading = false;
+                          }
 
                           /* {
                             Navigator.push(

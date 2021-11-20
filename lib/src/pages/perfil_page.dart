@@ -1,10 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:productos_app/src/models/clients.dart';
 import 'package:productos_app/src/models/products.dart';
+import 'package:productos_app/src/models/profile.dart';
 import 'package:productos_app/src/pages/details_product_page.dart';
 import 'package:productos_app/src/pages/register_page.dart';
 import 'package:productos_app/src/pages/request_page.dart';
+import 'package:productos_app/src/services/auth_service.dart';
+import 'package:productos_app/src/services/perfil_service.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class PerfilPage extends StatefulWidget {
   @override
@@ -17,142 +26,168 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    final profileService = Provider.of<PerfilService>(context);
+    final authservice = Provider.of<AuthService>(context, listen: false);
+
+    List<Profile> arr = [];
+
     return Stack(
       children: [
-        Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.blue[200],
-          appBar: buildAppBar(context),
-          body: ListView(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: Stack(
+        FutureBuilder(
+            future: authservice.readToken(),
+            // initialData: InitialData,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              Map<String, dynamic> payload = JwtDecoder.decode(snapshot.data);
+
+              print(payload["email"]);
+              for (int i = 0; i < profileService.profiles.length; i++) {
+                if (payload["email"] == profileService.profiles[i].email)
+                  arr.add(profileService.profiles[i]);
+              }
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.blue[200],
+                appBar: buildAppBar(context),
+                body: ListView(
                   children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 4, color: Colors.white),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(.1))
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(clients[0].image))),
+                    SizedBox(
+                      height: 20,
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 4, color: Colors.white),
-                            color: Colors.blue),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
+                    Center(
+                      child: Stack(
+                        children: [
+                          getImage(arr[0].image),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(width: 4, color: Colors.white),
+                                  color: Colors.blue),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        margin: const EdgeInsets.all(15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: Column(
+                          children: [
+                            buildTextField("Nombre", arr[0].name, false),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        margin: const EdgeInsets.all(15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: Column(
+                          children: [
+                            buildTextField("Telefono", arr[0].phone, false),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        margin: const EdgeInsets.all(15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: Column(
+                          children: [
+                            buildTextField("Dirección", arr[0].address, false),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        margin: const EdgeInsets.all(15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: Column(
+                          children: [
+                            buildTextField(
+                                "Contraseña", clients[0].password, true),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 80,
+                      margin: const EdgeInsets.all(15.0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 80, vertical: 10),
+                      child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          disabledColor: Colors.grey,
+                          elevation: 0,
+                          color: Colors.green,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                            child: Text(
+                              "Actualizar",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          onPressed: () {}),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Nombre", clients[0].name, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Telefono", clients[0].phone, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Dirección", clients[0].address, false),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  height: 80,
-                  margin: const EdgeInsets.all(15.0),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Column(
-                    children: [
-                      buildTextField("Contraseña", clients[0].password, true),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 80,
-                margin: const EdgeInsets.all(15.0),
-                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    disabledColor: Colors.grey,
-                    elevation: 0,
-                    color: Colors.green,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      child: Text(
-                        "Actualizar",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () {}),
-              ),
-            ],
-          ),
-        )
+              );
+            }),
       ],
+    );
+  }
+
+  Widget getImage(String? image) {
+    if (image == null) {
+      return Image(image: AssetImage('assets/no-image.png'), fit: BoxFit.cover);
+    }
+    if (image.startsWith('http')) {
+      return FadeInImage(
+          placeholder: AssetImage('assets/jar-loading.gif'),
+          image: NetworkImage(image),
+          fit: BoxFit.cover);
+    }
+
+    return Image.file(
+      File(image),
+      fit: BoxFit.cover,
     );
   }
 
