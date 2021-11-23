@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:productos_app/src/models/profile.dart';
@@ -11,6 +12,8 @@ class PerfilService extends ChangeNotifier {
   final String _baseUrl = 'productos-app-ef283-default-rtdb.firebaseio.com';
   final List<Profile> profiles = [];
   late Profile profileselected;
+  final storage = new FlutterSecureStorage();
+
   bool isLoading = true;
   bool isSaving = false;
   File? newPictureFile;
@@ -21,7 +24,8 @@ class PerfilService extends ChangeNotifier {
   Future<List<Profile>> loadprofiles() async {
     isLoading = true;
     notifyListeners();
-    final url = Uri.https(_baseUrl, 'profile.json');
+    final url = Uri.https(_baseUrl, 'profile.json',
+        {'auth': await storage.read(key: 'token') ?? ''});
     final respuesta = await http.get(url);
     final Map<String, dynamic> profilesMap = json.decode(respuesta.body);
     debugPrint('profile: $profilesMap');
@@ -49,7 +53,8 @@ class PerfilService extends ChangeNotifier {
   }
 
   Future<String> updateprofile(Profile profile) async {
-    final url = Uri.https(_baseUrl, 'profile/${profile.id}.json');
+    final url = Uri.https(_baseUrl, 'profile/${profile.id}.json',
+        {'auth': await storage.read(key: 'token') ?? ''});
     final respuesta = await http.put(url, body: profile.toJson());
     final decoData = respuesta.body;
     print(decoData);
@@ -60,7 +65,7 @@ class PerfilService extends ChangeNotifier {
   }
 
   Future<String> createprofile(Profile profile) async {
-    final url = Uri.https(_baseUrl, 'profile.json');
+    final url = Uri.https(_baseUrl, 'profile.json', {'auth':await storage.read(key: 'token') ?? ''});
     final respuesta = await http.post(url, body: profile.toJson());
     final decoData = json.decode(respuesta.body);
     print(decoData);

@@ -22,7 +22,8 @@ class AppState extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => PerfilService(),
-        )
+        ),
+       
       ],
       child: MyApp(),
     );
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         'init_page': (_) => InitPage(),
         'checking': (_) => CheckOutPage()
       },
+      scaffoldMessengerKey: NotificationsService.messengerKey,
       theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.blue[200],
           appBarTheme: AppBarTheme(

@@ -142,6 +142,7 @@ class _LoginForm extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => BottomBar()));
                           } else {
+                            NotificationsService.snowSnackBar(errorMessage);
                             print(errorMessage);
                             loginForm.isLoading = false;
                           }
