@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
         style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.white,
-      leading: GestureDetector(
+      /* leading: GestureDetector(
         onTap: () {
           authservice.logOut();
           Navigator.pushReplacementNamed(context, 'login');
@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
           Icons.login_outlined,
           color: Colors.red[300],
         ),
-      ),
+      ), */
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 20.0),

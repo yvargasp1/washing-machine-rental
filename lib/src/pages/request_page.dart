@@ -6,13 +6,17 @@ import 'package:productos_app/src/pages/details_product_page.dart';
 import 'package:productos_app/src/pages/home_page.dart';
 import 'package:productos_app/src/pages/register_page.dart';
 import 'package:productos_app/src/pages/request_page.dart';
+import 'package:productos_app/src/services/request_service.dart';
 import 'package:productos_app/src/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+
+import 'loading_page.dart';
 
 class RequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
+  final productService = Provider.of<RequestService>(context);
+    if (productService.isLoading) return LoadingPage();
     return Stack(
       children: [
         Scaffold(
@@ -34,11 +38,11 @@ class RequestPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 2.0, vertical: 6.0),
                   child: GridView.builder(
-                    itemCount: request.length,
+                       itemCount: productService.request.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1, childAspectRatio: 2.0),
                     itemBuilder: (context, index) =>
-                        ItemCardRequest(request: request[index], press: () {}),
+                        ItemCardRequest(request: productService.request[index], press: () {}),
                   ),
                 ),
               )

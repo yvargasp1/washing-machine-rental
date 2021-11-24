@@ -23,7 +23,9 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => PerfilService(),
         ),
-       
+        ChangeNotifierProvider(
+          create: (_) => RequestService(),
+        ),
       ],
       child: MyApp(),
     );

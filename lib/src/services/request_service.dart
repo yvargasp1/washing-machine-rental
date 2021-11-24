@@ -1,0 +1,109 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:productos_app/src/models/request2.dart';
+import 'package:flutter/foundation.dart';
+import 'package:productos_app/src/models/request2.dart';
+
+class RequestService extends ChangeNotifier {
+  final String _baseUrl = 'productos-app-ef283-default-rtdb.firebaseio.com';
+  final List<Request2> request = [];
+  late Request2 requestelected;
+  bool isLoading = true;
+  bool isSaving = false;
+  File? newPictureFile;
+  final storage = new FlutterSecureStorage();
+
+  RequestService() {
+    this.loadrequest();
+  }
+
+  Future<List<Request2>> loadrequest() async {
+    isLoading = true;
+    notifyListeners();
+    final url = Uri.https(_baseUrl, 'request.json',
+        {'auth': await storage.read(key: 'token') ?? ''});
+    final respuesta = await http.get(url);
+    final Map<String, dynamic> requestMap = json.decode(respuesta.body);
+    debugPrint('request: $requestMap');
+    requestMap.forEach((key, value) {
+      final productTemp = Request2.fromMap(value);
+      productTemp.id = key;
+      this.request.add(productTemp);
+    });
+    isLoading = false;
+    notifyListeners();
+    return request;
+  }
+
+  Future saveOrCreateProduct(Request2 product) async {
+    isSaving = true;
+    notifyListeners();
+    if (product.id != null) {
+      await this.updateProduct(product);
+    } else {
+      await this.createProduct(product);
+    }
+
+    isSaving = false;
+    notifyListeners();
+  }
+
+  Future<String> updateProduct(Request2 product) async {
+    final url = Uri.https(_baseUrl, 'request/${product.id}.json',
+        {'auth': await storage.read(key: 'token') ?? ''});
+    final respuesta = await http.put(url, body: product.toJson());
+    final decoData = respuesta.body;
+    print(decoData);
+    final index =
+        this.request.indexWhere((element) => element.id == product.id);
+    this.request[index] = product;
+    return product.id!;
+  }
+
+  Future<String> createProduct(Request2 product) async {
+    final url = Uri.https(_baseUrl, 'request.json',
+        {'auth': await storage.read(key: 'token') ?? ''});
+    final respuesta = await http.post(url, body: product.toJson());
+    final decoData = json.decode(respuesta.body);
+    print(decoData);
+    product.id = decoData['name'];
+    this.request.add(product);
+    return product.id!;
+  }
+
+  void updateSelectedProductImage(String path) {
+    this.requestelected.image = path;
+    this.newPictureFile = File.fromUri(Uri(path: path));
+    notifyListeners();
+  }
+
+  Future<String?> upladImage() async {
+    if (newPictureFile == null) return null;
+
+    this.isSaving = true;
+    notifyListeners();
+    final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/yvargasp1/image/upload?upload_preset=c0bbzuw5');
+    final imageUpload = http.MultipartRequest('POST', url);
+    final file =
+        await http.MultipartFile.fromPath('file', newPictureFile!.path);
+    imageUpload.files.add(file);
+    final streamResponse = await imageUpload.send();
+    final resp = await http.Response.fromStream(streamResponse);
+    if (resp.statusCode != 200 && resp.statusCode != 201) {
+      print('error');
+      print(resp.body);
+      return null;
+    }
+
+    print(resp.body);
+    this.newPictureFile = null;
+    final decodeData = json.decode(resp.body);
+    return decodeData['secure_url'];
+  }
+}

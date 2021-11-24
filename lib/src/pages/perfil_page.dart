@@ -34,15 +34,16 @@ class PerfilPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        /*   leading: GestureDetector(
+        leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            authservice.logOut();
+            Navigator.pushReplacementNamed(context, 'login');
           },
-          /*   child: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ), */
-        ),*/
+          child: Icon(
+            Icons.login_outlined,
+            color: Colors.red[300],
+          ),
+        ),
       ),
       body: AuthBackground(
         child: SingleChildScrollView(
